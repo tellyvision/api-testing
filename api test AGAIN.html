@@ -6,15 +6,32 @@
 </head>
 
 <body>
+  <div id="service-helper"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2fqdkmA9qUXkDg9zKMF2wmnwN4IkykSg&libraries=places&callback=getRelevantGoogleReviews">
+</script>
 <script type="text/javascript">
-    $.ajax({
-      url: "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=1500&type=restaurant&keyword=cruise&key=AIzaSyC2fqdkmA9qUXkDg9zKMF2wmnwN4IkykSg",
-      method: "GET",
-      headers: {'Access-Control-Allow-Origin': 'https://tellyvision.github.io/'}
-    }).then(function(response) {
-      console.log(response);
-    });
+    window.getRelevantGoogleReviews = function() {
+      var service = new google.maps.places.PlacesService($('#service-helper').get(0));
+      var whereAmI = new google.maps.LatLng(-33.8665433,151.1956316);
+      var request = {
+        location: whereAmI,
+        radius: '500',
+        type: ['restaurant']
+      };
+
+      service.nearbySearch(request, callback);
+    }
+
+    function callback(results, status) {
+      if (status == google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+          var place = results[i];
+          console.log(results[i]);
+        }
+      }
+    }
 </script>
 </body>
 </html>
